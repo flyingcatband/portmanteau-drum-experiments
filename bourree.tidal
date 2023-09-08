@@ -1,0 +1,97 @@
+-- RANDOM SHIT --------------------------
+-- 1 2 3 HIT IT??? but seems the sample is a bit slow for us :(
+once $ s "erk"
+
+p "lofi" $ s "click" <| n (run 4) -- four glitch sounds, maybe useful
+
+once $ s "baa"  # n (choose [0..7])
+
+once $ s "made" <| n (run 7)
+-- useful things ----------------------------------
+
+-- mtrigger 8 $ filterWhen (>=0) $ -- after 8 cycles
+
+-- other drum sounds
+p "4floor" $ s "future:5*4"
+p "4floor" $ sound "bd:15*4"
+
+-- change the drum sound slowly
+xfade  1 $ "future:5*4"
+
+-- every 4th cycle use a different sound
+d9 $ every 4 (# s "hh") $ s "bd"
+
+-- crash
+once  $ s "cc" # room 0.6
+
+once $  s "dr_few:5"
+
+-- some sort of fill thing?
+once $ s "dr_few:5*4 dr_few:5*4 dr_few:5*4 dr_few:5"  # lpf (range 60 5000 $ rand)
+
+d1 $ sound "hc ~ hc hc" # n (choose [0..16])
+
+d1 $ sound "bd*32" # speed (perlin + 0.5)
+
+-- Start ---------------------------------
+-- Set 124bpm
+setcps (124/60/4)
+
+resetCycles
+
+hush
+
+-- start with a click intro
+do
+  once $ s "e*4"
+  anticipateIn 1 1 $ sound "808bd:4*4"  -- 4 floor
+  anticipateIn 2 1 $ sound "~ clubkick:2 ~ clubkick:2" # gain 0.9 -- kick
+  anticipateIn 3 1 $ s "hand:15(3,8)" -- click
+
+-- start straight in
+do
+  d1 $ sound "808bd:4*4"  -- 4 floor
+  d2 $ sound "~ clubkick:2 ~ clubkick:2" # gain 0.9 -- kick
+  d3 $ s "hand:15(3,8)" -- click
+
+p "offbeat tom" $ mtrigger 2 $ filterWhen (>=0) $ fast 2 $ s " ~ ~ ~ lt" -- # n (choose [0..6])
+
+p "snare"  $ sound "~ sd ~ [sd*<1 2 1 4>]"
+
+p "clap" $ sound "~ cp ~ cp"
+
+p "bonusbd" $ every 4 (ply 2) $ every 8 (ply 2) $ "808bd:2*4"
+
+p "tom" $   s "ht [~ ht] [< ~ ~ ~ ht> ht] [<~ ht> ht]" -- # n (choose [0..4])
+
+p "something" $ s "hh(<3 3 3 4>,8)"
+
+p "HH" $  s "hh ~ [~ hh] ~"
+
+p "1" $  s "[hh hh] [hh ~ hh hh ] [hh hh] hh"
+
+p "shake" $ s "drumtraks:13*16" # lpf (range 60 5000 $ rand)
+
+p "???" $ s "[sd sd ~ sd] [sd sd] [sd*4] [sd*2]"
+
+anticipateIn 4 1 $ note "e3" #sound "supersaw" # gain 0.8 # legato 0.5
+  + note "0 0 0 0"
+  + note "<0 0 -2 0>"
+
+anticipateIn 5 1 $ fast 2 $
+  sometimes (+ note "12") $
+  note "e5" # sound "supersquare" # gain 0.6 # legato 0.5
+  + note "0 <3 10> <5 0> <0 5 3 10>" # lpf 2000 # room 0.6
+
+-- SHHHHH ------------------------
+
+hush
+
+d1 silence
+
+-- just play d1
+solo 1
+
+unsolo 1
+
+p "namedthing"  silence
